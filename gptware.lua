@@ -36,9 +36,6 @@ local ClientTab = Window:CreateTab("Client", 7992557358)
 
 --movement
 
---create a new section, everything under here will be for "Player section"
-MovementTab:CreateSection("Player")
-
 MovementTab:CreateSlider({
     Name = "Speed",
     Range = {1, 25},
@@ -63,6 +60,18 @@ MovementTab:CreateSlider({
     end,
 })
 
+MovementTab:CreateSlider({
+    Name = "Gravity Modifier",
+    Range = {-25, 25},
+    Increment = 0.5,
+    Suffix = "Modifier",
+    CurrentValue = 1,
+    Flag = "GravitySlider",
+    Callback = function(Value)
+        game.Workspace.Gravity = Value * 196.2
+    end,
+})
+
 --client
 
 ClientTab:CreateButton({
@@ -71,5 +80,6 @@ ClientTab:CreateButton({
         Rayfield:Destroy()
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        game.Workspace.Gravity = 196.2
     end,
- })
+})
