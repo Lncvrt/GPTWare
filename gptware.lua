@@ -57,5 +57,6 @@ local SelfDistructButton = ClientTab:CreateButton({
     Name = "Self Destruct",
     Callback = function()
         Rayfield:Destroy()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
     end,
  })
