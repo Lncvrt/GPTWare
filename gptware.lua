@@ -1,9 +1,12 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local player = game.Players.LocalPlayer
+local userInputService = game:GetService("UserInputService")
+local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
+local lighting = game:GetService("Lighting")
 
 local isJumpFlying = false
-local jumpFlyStartHeight = 0.0;
+local jumpFlyStartHeight = 0;
 
 local hud
 local hudframe1
@@ -13,11 +16,19 @@ local hudicorner2
 local hudtextlabel1
 local hudtextlabel2
 
+local spacePressed = false
+local shiftPressed = false
+
+local originalAmbient = lighting.Ambient
+local originalOutdoorAmbient = lighting.OutdoorAmbient
+local originalBrightness = lighting.Brightness
+local originalExposureCompensation = lighting.ExposureCompensation
+
 Rayfield:Notify({
    Title = "GPTWare Executed!",
    Content = "GPTWare has been Successfully executed!",
    Duration = 3,
-   Image = 4483362458,
+   Image = 18635540561,
    Actions = {
       Ignore = {
          Name = "Okay!",
@@ -46,6 +57,8 @@ local Window = Rayfield:CreateWindow({
 local MovementTab = Window:CreateTab("Movement", 18633204761)
 
 local PlayerTab = Window:CreateTab("Player", 18633259530)
+
+local VisualTab = Window:CreateTab("Visual", 18635495051)
 
 local ClientTab = Window:CreateTab("Client", 18633194275)
 
@@ -108,7 +121,7 @@ MovementTab:CreateButton({
                 Title = "Error running Long Jump",
                 Content = "You must be on the ground to use this module!",
                 Duration = 6.5,
-                Image = 4483362458,
+                Image = 18635540561,
                 Actions = {
                    Ignore = {
                       Name = "Okay!",
@@ -153,6 +166,27 @@ PlayerTab:CreateButton({
     Name = "Jump",
     Callback = function()
         player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end,
+})
+
+--visual
+
+VisualTab:CreateToggle({
+    Name = "Fullbright",
+    CurrentValue = false,
+    Flag = "FullbrightToggle",
+    Callback = function(Value)
+        if Value then
+            lighting.Ambient = Color3.fromRGB(255, 255, 255)
+            lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+            lighting.Brightness = 1
+            lighting.ExposureCompensation = 1
+        else
+            lighting.Ambient = originalAmbient
+            lighting.OutdoorAmbient = originalOutdoorAmbient
+            lighting.Brightness = originalBrightness
+            lighting.ExposureCompensation = originalExposureCompensation
+        end
     end,
 })
 
@@ -223,6 +257,49 @@ function checkJumpFlyingStatus()
         wait(0.01)
     end
 end
+
+local function onInputBegan(input, gameProcessedEvent)
+    if not gameProcessedEvent then
+        if input.KeyCode == Enum.KeyCode.Space then
+            spacePressed = true
+        elseif input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
+            shiftPressed = true
+        end
+    end
+end
+
+local function onInputEnded(input)
+    if input.KeyCode == Enum.KeyCode.Space then
+        spacePressed = false
+    elseif input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
+        shiftPressed = false
+    end
+end
+
+local function updateJumpFlyHeight()
+    while true do
+        local characterPosition = character.PrimaryPart.Position
+        local groundHeight = workspace.Terrain:WorldToCellPreferFull(characterPosition).Y * workspace.Terrain.CellSize.Y
+        if spacePressed then
+            jumpFlyStartHeight = jumpFlyStartHeight + 4
+        elseif shiftPressed then
+            jumpFlyStartHeight = jumpFlyStartHeight - 4
+        end
+
+        if jumpFlyStartHeight < groundHeight then
+            jumpFlyStartHeight = groundHeight
+        end
+
+        character:SetPrimaryPartCFrame(CFrame.new(character.PrimaryPart.Position.X, jumpFlyStartHeight, character.PrimaryPart.Position.Z))
+
+        wait(0.1)
+    end
+end
+
+userInputService.InputBegan:Connect(onInputBegan)
+userInputService.InputEnded:Connect(onInputEnded)
+
+spawn(updateJumpFlyHeight)
 
 --huds
 
