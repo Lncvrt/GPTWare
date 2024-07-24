@@ -92,6 +92,44 @@ MovementTab:CreateToggle({
     end,
 })
 
+MovementTab:CreateButton({
+    Name = "Long Jump",
+    Callback = function()
+        if player.Character.Humanoid.FloorMaterial.Name == "Air" then
+            Rayfield:Notify({
+                Title = "Error running Long Jump",
+                Content = "You must be on the ground to use this module!",
+                Duration = 6.5,
+                Image = 4483362458,
+                Actions = {
+                   Ignore = {
+                      Name = "Okay!",
+                      Callback = function()
+                   end
+                },
+             },
+             })
+        else
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+
+            if hrp then
+                local camera = game.Workspace.CurrentCamera
+                local lookVector = camera.CFrame.LookVector
+
+                local bodyVelocity = Instance.new("BodyVelocity")
+                bodyVelocity.Velocity = lookVector * 200 + Vector3.new(0, 200, 0)
+                bodyVelocity.MaxForce = Vector3.new(50000, 10000, 50000)
+                bodyVelocity.P = 20000
+                bodyVelocity.Parent = hrp
+
+                game:GetService("Debris"):AddItem(bodyVelocity, 0.1)
+            end
+        end
+    end,
+})
+
 --player
 
 PlayerTab:CreateToggle({
