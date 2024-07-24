@@ -1,9 +1,9 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local player = game.Players.LocalPlayer
-local userInputService = game:GetService("UserInputService")
+local userInputService = game:GetService('UserInputService')
 local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-local lighting = game:GetService("Lighting")
+local lighting = game:GetService('Lighting')
 
 local isJumpFlying = false
 local jumpFlyStartHeight = 0;
@@ -24,14 +24,17 @@ local originalOutdoorAmbient = lighting.OutdoorAmbient
 local originalBrightness = lighting.Brightness
 local originalExposureCompensation = lighting.ExposureCompensation
 
+local loadedInfiniteYield = false
+local loadedSimpleBypass = false
+
 Rayfield:Notify({
-   Title = "GPTWare Executed!",
-   Content = "GPTWare has been Successfully executed!",
+   Title = 'GPTWare Executed!',
+   Content = 'GPTWare has been Successfully executed!',
    Duration = 3,
    Image = 18635540561,
    Actions = {
       Ignore = {
-         Name = "Okay!",
+         Name = 'Okay!',
          Callback = function()
       end
    },
@@ -39,113 +42,115 @@ Rayfield:Notify({
 })
 
 local Window = Rayfield:CreateWindow({
-   Name = "GPTWare",
-   LoadingTitle = "GPTWare",
-   LoadingSubtitle = "by Lncvrt & Loqrp",
+   Name = 'GPTWare',
+   LoadingTitle = 'GPTWare',
+   LoadingSubtitle = 'by Lncvrt & Loqrp',
    ConfigurationSaving = {
       Enabled = true,
       FolderName = nil,
-      FileName = "GPTWare"
+      FileName = 'GPTWare'
    },
    Discord = {
       Enabled = true,
-      Invite = "EZTTvr27cA",
+      Invite = 'EZTTvr27cA',
       RememberJoins = true
    },
 })
 
-local MovementTab = Window:CreateTab("Movement", 18633204761)
+local MovementTab = Window:CreateTab('Movement', 18633204761)
 
-local PlayerTab = Window:CreateTab("Player", 18633259530)
+local PlayerTab = Window:CreateTab('Player', 18633259530)
 
-local VisualTab = Window:CreateTab("Visual", 18635495051)
+local VisualTab = Window:CreateTab('Visual', 18635495051)
 
-local ClientTab = Window:CreateTab("Client", 18633194275)
+local ClientTab = Window:CreateTab('Client', 18633194275)
+
+local ScriptsTab = Window:CreateTab('Scripts', 18636073939)
 
 --movement
 
 MovementTab:CreateSlider({
-    Name = "Speed",
+    Name = 'Speed',
     Range = {1, 25},
     Increment = 0.5,
-    Suffix = "Modifier",
+    Suffix = 'Modifier',
     CurrentValue = 1,
-    Flag = "SpeedSlider",
+    Flag = 'SpeedSlider',
     Callback = function(Value)
         player.Character.Humanoid.WalkSpeed = Value * 16
     end,
 })
 
 MovementTab:CreateSlider({
-    Name = "Jump Power Modifier",
+    Name = 'Jump Power Modifier',
     Range = {1, 10},
     Increment = 0.5,
-    Suffix = "Modifier",
+    Suffix = 'Modifier',
     CurrentValue = 1,
-    Flag = "JumpPowerSlider",
+    Flag = 'JumpPowerSlider',
     Callback = function(Value)
         player.Character.Humanoid.JumpPower = Value * 50
     end,
 })
 
 MovementTab:CreateSlider({
-    Name = "Gravity Modifier",
+    Name = 'Gravity Modifier',
     Range = {-25, 25},
     Increment = 0.5,
-    Suffix = "Modifier",
+    Suffix = 'Modifier',
     CurrentValue = 1,
-    Flag = "GravitySlider",
+    Flag = 'GravitySlider',
     Callback = function(Value)
         game.Workspace.Gravity = Value * 196.2
     end,
 })
 
 MovementTab:CreateToggle({
-    Name = "Jump Fly",
+    Name = 'Jump Fly',
     CurrentValue = false,
-    Flag = "JumpFlyToggle",
+    Flag = 'JumpFlyToggle',
     Callback = function(Value)
         isJumpFlying = Value
         if Value then
-            jumpFlyStartHeight = player.Character:FindFirstChild("HumanoidRootPart").Position.Y
+            jumpFlyStartHeight = player.Character:FindFirstChild('HumanoidRootPart').Position.Y
             checkJumpFlyingStatus()
         end
     end,
 })
 
 MovementTab:CreateButton({
-    Name = "Long Jump",
+    Name = 'Long Jump',
     Callback = function()
-        if player.Character.Humanoid.FloorMaterial.Name == "Air" then
+        if player.Character.Humanoid.FloorMaterial.Name == 'Air' then
             Rayfield:Notify({
-                Title = "Error running Long Jump",
-                Content = "You must be on the ground to use this module!",
+                Title = 'Error running Long Jump',
+                Content = 'You must be on the ground to use this module!',
                 Duration = 6.5,
                 Image = 18635540561,
                 Actions = {
                    Ignore = {
-                      Name = "Okay!",
+                      Name = 'Okay!',
                       Callback = function()
                    end
                 },
-             },
-             })
+            },
+            })
         else
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
-            local hrp = character:FindFirstChild("HumanoidRootPart")
+            local hrp = character:FindFirstChild('HumanoidRootPart')
 
             if hrp then
                 local camera = game.Workspace.CurrentCamera
                 local lookVector = camera.CFrame.LookVector
 
-                local bodyVelocity = Instance.new("BodyVelocity")
+                local bodyVelocity = Instance.new('BodyVelocity')
                 bodyVelocity.Velocity = lookVector * 200 + Vector3.new(0, 200, 0)
                 bodyVelocity.MaxForce = Vector3.new(50000, 10000, 50000)
                 bodyVelocity.P = 20000
                 bodyVelocity.Parent = hrp
 
-                game:GetService("Debris"):AddItem(bodyVelocity, 0.1)
+                game:GetService('Debris'):AddItem(bodyVelocity, 0.1)
             end
         end
     end,
@@ -154,16 +159,16 @@ MovementTab:CreateButton({
 --player
 
 PlayerTab:CreateToggle({
-    Name = "Sit State",
+    Name = 'Sit State',
     CurrentValue = false,
-    Flag = "SitStateButton",
+    Flag = 'SitStateButton',
     Callback = function(Value)
         player.Character.Humanoid.Sit = Value
     end,
 })
 
 PlayerTab:CreateButton({
-    Name = "Jump",
+    Name = 'Jump',
     Callback = function()
         player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end,
@@ -172,9 +177,9 @@ PlayerTab:CreateButton({
 --visual
 
 VisualTab:CreateToggle({
-    Name = "Fullbright",
+    Name = 'Fullbright',
     CurrentValue = false,
-    Flag = "FullbrightToggle",
+    Flag = 'FullbrightToggle',
     Callback = function(Value)
         if Value then
             lighting.Ambient = Color3.fromRGB(255, 255, 255)
@@ -193,7 +198,7 @@ VisualTab:CreateToggle({
 --client
 
 ClientTab:CreateButton({
-    Name = "Self Destruct",
+    Name = 'Self Destruct',
     Callback = function()
         Rayfield:Destroy()
         player.Character.Humanoid.WalkSpeed = 16
@@ -205,30 +210,30 @@ ClientTab:CreateButton({
 })
 
 ClientTab:CreateDropdown({
-    Name = "HUD",
-    Options = {"GPTWare", "Sigma Jello", "LiquidBounce", "None"},
-    CurrentOption = "GPTWare",
+    Name = 'HUD',
+    Options = {'GPTWare', 'Sigma Jello', 'LiquidBounce', 'None'},
+    CurrentOption = 'GPTWare',
     MultipleOptions = false,
-    Flag = "HUDSelectionDropdown",
+    Flag = 'HUDSelectionDropdown',
     Callback = function(Option)
         local optionFound = false
         for _, value in ipairs(Option) do
-            if value == "GPTWare" then
+            if value == 'GPTWare' then
                 optionFound = true
                 destroyHUDS()
                 useGPTWareHud()
                 break
-            elseif value == "Sigma Jello" then
+            elseif value == 'Sigma Jello' then
                 optionFound = true
                 destroyHUDS()
                 useSigmaJelloHud()
                 break
-            elseif value == "LiquidBounce" then
+            elseif value == 'LiquidBounce' then
                 optionFound = true
                 destroyHUDS()
                 useLiquidBounceHUD()
                 break
-            elseif value == "None" then
+            elseif value == 'None' then
                 optionFound = true
                 destroyHUDS()
                 break
@@ -240,13 +245,89 @@ ClientTab:CreateDropdown({
     end,
 })
 
+--scripts
+
+ScriptsTab:CreateButton({
+    Name = 'Infinite Yield',
+    Callback = function()
+        if not loadedInfiniteYield then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+            Rayfield:Notify({
+                Title = 'Successfully loaded external script!',
+                Content = 'Infinite Yield has been loaded successfully!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+            loadedInfiniteYield = true
+        else
+            Rayfield:Notify({
+                Title = 'Failed to load external script!',
+                Content = 'Infinite Yield has already been loaded!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+        end
+    end,
+})
+
+ScriptsTab:CreateButton({
+    Name = 'SimpleBypass',
+    Callback = function()
+        if not loadedSimpleBypass then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/SkireScripts/Ouxie/main/Projects/simplebypass.lua"))()
+            Rayfield:Notify({
+                Title = 'Successfully loaded external script!',
+                Content = 'SimpleBypass has been loaded successfully!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+            loadedSimpleBypass = true
+        else
+            Rayfield:Notify({
+                Title = 'Failed to load external script!',
+                Content = 'SimpleBypass has already been loaded!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+        end
+    end,
+})
+
 --actions
 
 function checkJumpFlyingStatus()
     while isJumpFlying do
         local player = game.Players.LocalPlayer
         local character = player and player.Character
-        local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+        local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
 
         if humanoidRootPart then
             if humanoidRootPart.Position.Y <= jumpFlyStartHeight then
@@ -314,15 +395,15 @@ function destroyHUDS()
 end
 
 function useGPTWareHud()
-    hud = Instance.new("ScreenGui")
-    hudframe1 = Instance.new("Frame")
-    hudframe2 = Instance.new("Frame")
-    hudicorner1 = Instance.new("UICorner")
-    hudicorner2 = Instance.new("UICorner")
-    hudtextlabel1 = Instance.new("TextLabel")
+    hud = Instance.new('ScreenGui')
+    hudframe1 = Instance.new('Frame')
+    hudframe2 = Instance.new('Frame')
+    hudicorner1 = Instance.new('UICorner')
+    hudicorner2 = Instance.new('UICorner')
+    hudtextlabel1 = Instance.new('TextLabel')
     
-    hud.Name = "GPTWare HUD"
-    hud.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    hud.Name = 'GPTWare HUD'
+    hud.Parent = game.Players.LocalPlayer:WaitForChild('PlayerGui')
     hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     
     hudframe1.Parent = hud
@@ -342,7 +423,7 @@ function useGPTWareHud()
     hudtextlabel1.Position = UDim2.new(0, 0, 0.32294035, 0)
     hudtextlabel1.Size = UDim2.new(0, 213, 0, 20)
     hudtextlabel1.Font = Enum.Font.SourceSans
-    hudtextlabel1.Text = "GPTWare | Release Build"
+    hudtextlabel1.Text = 'GPTWare | Release Build'
     hudtextlabel1.TextColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel1.TextScaled = true
     hudtextlabel1.TextSize = 30.000
@@ -360,13 +441,13 @@ function useGPTWareHud()
 end
 
 function useSigmaJelloHud()
-    hud = Instance.new("ScreenGui")
-    hudframe1 = Instance.new("Frame")
-    hudtextlabel1 = Instance.new("TextLabel")
-    hudtextlabel2 = Instance.new("TextLabel")
+    hud = Instance.new('ScreenGui')
+    hudframe1 = Instance.new('Frame')
+    hudtextlabel1 = Instance.new('TextLabel')
+    hudtextlabel2 = Instance.new('TextLabel')
 
-    hud.Name = "Sigma Jello HUD"
-    hud.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    hud.Name = 'Sigma Jello HUD'
+    hud.Parent = game.Players.LocalPlayer:WaitForChild('PlayerGui')
     hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     hudframe1.Parent = hud
@@ -385,7 +466,7 @@ function useSigmaJelloHud()
     hudtextlabel1.Position = UDim2.new(-0.122807018, 0, 0.00961538497, 0)
     hudtextlabel1.Size = UDim2.new(0, 200, 0, 50)
     hudtextlabel1.Font = Enum.Font.SourceSansLight
-    hudtextlabel1.Text = "G P T"
+    hudtextlabel1.Text = 'G P T'
     hudtextlabel1.TextColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel1.TextSize = 69.000
     hudtextlabel1.TextTransparency = 0.500
@@ -398,19 +479,19 @@ function useSigmaJelloHud()
     hudtextlabel2.Position = UDim2.new(-0.232456148, 0, 0.490384609, 0)
     hudtextlabel2.Size = UDim2.new(0, 200, 0, 24)
     hudtextlabel2.Font = Enum.Font.SourceSansLight
-    hudtextlabel2.Text = "Ware"
+    hudtextlabel2.Text = 'Ware'
     hudtextlabel2.TextColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel2.TextSize = 37.000
     hudtextlabel2.TextTransparency = 0.500
 end
 
 function useLiquidBounceHUD()
-    hud = Instance.new("ScreenGui")
-    hudtextlabel1 = Instance.new("TextLabel")
-    hudtextlabel2 = Instance.new("TextLabel")
+    hud = Instance.new('ScreenGui')
+    hudtextlabel1 = Instance.new('TextLabel')
+    hudtextlabel2 = Instance.new('TextLabel')
 
-    hud.Name = "LiquidBounce HUD"
-    hud.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    hud.Name = 'LiquidBounce HUD'
+    hud.Parent = game.Players.LocalPlayer:WaitForChild('PlayerGui')
     hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     hudtextlabel1.Parent = hud
@@ -421,7 +502,7 @@ function useLiquidBounceHUD()
     hudtextlabel1.Position = UDim2.new(0.0164203607, 0, 0.012531328, 0)
     hudtextlabel1.Size = UDim2.new(0, 200, 0, 57)
     hudtextlabel1.Font = Enum.Font.SourceSansBold
-    hudtextlabel1.Text = "GPTBounce"
+    hudtextlabel1.Text = 'GPTBounce'
     hudtextlabel1.TextColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.TextSize = 56.000
     hudtextlabel1.TextTransparency = 0.200
@@ -434,7 +515,7 @@ function useLiquidBounceHUD()
     hudtextlabel2.Position = UDim2.new(0.0106732352, 0, -9.56064472e-09, 0)
     hudtextlabel2.Size = UDim2.new(0, 207, 0, 68)
     hudtextlabel2.Font = Enum.Font.SourceSansBold
-    hudtextlabel2.Text = "GPTBounce"
+    hudtextlabel2.Text = 'GPTBounce'
     hudtextlabel2.TextColor3 = Color3.fromRGB(8, 116, 255)
     hudtextlabel2.TextSize = 56.000
 end
