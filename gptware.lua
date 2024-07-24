@@ -51,6 +51,18 @@ local SpeedSlider = MovementTab:CreateSlider({
     end,
 })
 
+local JumpPowerSlider = MovementTab:CreateSlider({
+    Name = "Jump Power Modifier",
+    Range = {1, 10},
+    Increment = 0.5,
+    Suffix = "Modifier",
+    CurrentValue = 1,
+    Flag = "JumpPowerSlider",
+    Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value * 50
+    end,
+})
+
 --client
 
 local SelfDistructButton = ClientTab:CreateButton({
@@ -58,5 +70,6 @@ local SelfDistructButton = ClientTab:CreateButton({
     Callback = function()
         Rayfield:Destroy()
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
     end,
  })
