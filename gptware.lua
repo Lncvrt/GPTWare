@@ -39,7 +39,7 @@ local ClientTab = Window:CreateTab("Client", 7992557358)
 --create a new section, everything under here will be for "Player section"
 MovementTab:CreateSection("Player")
 
-local SpeedSlider = MovementTab:CreateSlider({
+MovementTab:CreateSlider({
     Name = "Speed",
     Range = {1, 25},
     Increment = 0.5,
@@ -51,7 +51,7 @@ local SpeedSlider = MovementTab:CreateSlider({
     end,
 })
 
-local JumpPowerSlider = MovementTab:CreateSlider({
+MovementTab:CreateSlider({
     Name = "Jump Power Modifier",
     Range = {1, 10},
     Increment = 0.5,
@@ -65,7 +65,7 @@ local JumpPowerSlider = MovementTab:CreateSlider({
 
 --client
 
-local SelfDistructButton = ClientTab:CreateButton({
+ClientTab:CreateButton({
     Name = "Self Destruct",
     Callback = function()
         Rayfield:Destroy()
