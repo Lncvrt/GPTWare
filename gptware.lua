@@ -361,3 +361,5 @@ function useLiquidBounceHUD()
     hudtextlabel2.TextColor3 = Color3.fromRGB(8, 116, 255)
     hudtextlabel2.TextSize = 56.000
 end
+
+useGPTWareHud()
