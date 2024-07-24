@@ -41,7 +41,7 @@ MovementTab:CreateSection("Player")
 
 local SpeedSlider = MovementTab:CreateSlider({
     Name = "Speed",
-    Range = {1, 10},
+    Range = {1, 25},
     Increment = 0.5,
     Suffix = "Modifier",
     CurrentValue = 1,
