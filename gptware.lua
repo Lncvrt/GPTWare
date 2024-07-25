@@ -179,7 +179,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'Suicide',
     Callback = function()
-         player.Character:FindFirstChild("Head"):Destroy()
+         player.Character:FindFirstChild('Head'):Destroy()
     end,
 })
 --visual
@@ -296,7 +296,7 @@ ScriptsTab:CreateButton({
     Name = 'SimpleBypass',
     Callback = function()
         if not loadedSimpleBypass then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/SkireScripts/Ouxie/main/Projects/simplebypass.lua"))()
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/SkireScripts/Ouxie/main/Projects/simplebypass.lua'))()
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
                 Content = 'SimpleBypass has been loaded successfully!',
@@ -413,38 +413,39 @@ function useGPTWareHud()
     hud.Name = 'GPTWare HUD'
     hud.Parent = game.Players.LocalPlayer:WaitForChild('PlayerGui')
     hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
+
     hudframe1.Parent = hud
     hudframe1.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    hudframe1.BackgroundTransparency = 0.500
     hudframe1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudframe1.BorderSizePixel = 0
-    hudframe1.Position = UDim2.new(0.0172413792, 0, 0.932330847, 0)
-    hudframe1.Size = UDim2.new(0, 220, 0, 33)
-    
+    hudframe1.Position = UDim2.new(0.0172413867, 0, 0.932330906, 0)
+    hudframe1.Size = UDim2.new(0, 251, 0, 33)
+
     hudicorner1.Parent = hudframe1
-    
+
     hudtextlabel1.Parent = hudframe1
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel1.BackgroundTransparency = 1.000
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(0, 0, 0.32294035, 0)
-    hudtextlabel1.Size = UDim2.new(0, 213, 0, 20)
-    hudtextlabel1.Font = Enum.Font.SourceSans
-    hudtextlabel1.Text = 'GPTWare | Release Build'
+    hudtextlabel1.Size = UDim2.new(0, 250, 0, 20)
+    hudtextlabel1.Font = Enum.Font.Sarpanch
+    hudtextlabel1.Text = 'GPTWare | Free Version | v0.0.1'
     hudtextlabel1.TextColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel1.TextScaled = true
     hudtextlabel1.TextSize = 30.000
     hudtextlabel1.TextStrokeColor3 = Color3.fromRGB(255, 255, 255)
     hudtextlabel1.TextWrapped = true
-    
+
     hudframe2.Parent = hudframe1
     hudframe2.BackgroundColor3 = Color3.fromRGB(134, 26, 240)
     hudframe2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudframe2.BorderSizePixel = 0
     hudframe2.Position = UDim2.new(0.0270000007, 0, 0.200000003, 0)
-    hudframe2.Size = UDim2.new(0, 207, 0, 5)
-    
+    hudframe2.Size = UDim2.new(0, 240, 0, 5)
+
     hudicorner2.Parent = hudframe2
 end
 
