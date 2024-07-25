@@ -329,6 +329,43 @@ ScriptsTab:CreateButton({
     end,
 })
 
+ScriptsTab:CreateButton({
+    Name = 'Vehicle Legends Auto Farmer',
+    Callback = function()
+        if not loadedSimpleBypass then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Marco8642/science/main/Vehicle%20legends"))()
+            Rayfield:Notify({
+                Title = 'Successfully loaded external script!',
+                Content = 'Vehicle Legends Auto Farmer has been loaded successfully!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+            loadedSimpleBypass = true
+        else
+            Rayfield:Notify({
+                Title = 'Failed to load external script!',
+                Content = 'Vehicle Legends Auto Farmer has already been loaded!',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+        end
+    end,
+})
+
 --actions
 
 function checkJumpFlyingStatus()
