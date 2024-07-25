@@ -156,6 +156,8 @@ MovementTab:CreateButton({
     end,
 })
 
+
+
 --player
 
 PlayerTab:CreateToggle({
@@ -174,6 +176,12 @@ PlayerTab:CreateButton({
     end,
 })
 
+PlayerTab:CreateButton({
+    Name = 'Suicide',
+    Callback = function()
+         player.Character:FindFirstChild("Head"):Destroy()
+    end,
+})
 --visual
 
 VisualTab:CreateToggle({
