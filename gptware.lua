@@ -305,6 +305,7 @@ ScriptsTab:CreateButton({
     Name = 'Infinite Yield',
     Callback = function()
         if not loadedInfiniteYield then
+            print('Loading Infinite Yield')
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
@@ -342,6 +343,7 @@ ScriptsTab:CreateButton({
     Name = 'SimpleBypass',
     Callback = function()
         if not loadedSimpleBypass then
+            print('Loading SimpleBypass')
             loadstring(game:HttpGet('https://raw.githubusercontent.com/SkireScripts/Ouxie/main/Projects/simplebypass.lua'))()
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
@@ -379,7 +381,8 @@ ScriptsTab:CreateButton({
     Name = 'Vehicle Legends Auto Farmer',
     Callback = function()
         if not loadedSimpleBypass then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Marco8642/science/main/Vehicle%20legends"))()
+            print('Loading Vehicle Legends Auto Farmer')
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Marco8642/science/main/Vehicle%20legends'))()
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
                 Content = 'Vehicle Legends Auto Farmer has been loaded successfully!',
