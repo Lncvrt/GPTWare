@@ -61,9 +61,9 @@ local Window = Rayfield:CreateWindow({
    },
 })
 
-local MovementTab = Window:CreateTab('Movement', 18633204761)
+local MovementTab = Window:CreateTab('Movement', 18659527523)
 
-local MovementPlusTab = Window:CreateTab('Movement+', 18657993756)
+local MovementPlusTab = Window:CreateTab('Movement Plus', 18633204761)
 
 local PlayerTab = Window:CreateTab('Player', 18633259530)
 
