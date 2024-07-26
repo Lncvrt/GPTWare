@@ -509,7 +509,7 @@ function useGPTWareHud()
 
     hudtextlabel1.Parent = hudframe1
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 100
+    hudtextlabel1.BackgroundTransparency = 1.00
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(0, 0, 0.32294035, 0)
@@ -544,7 +544,7 @@ function useSigmaJelloHud()
 
     hudframe1.Parent = hud
     hudframe1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudframe1.BackgroundTransparency = 100
+    hudframe1.BackgroundTransparency = 1.00
     hudframe1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudframe1.BorderSizePixel = 0
     hudframe1.Position = UDim2.new(0.0209999997, 0, 0.0209999997, 0)
@@ -552,7 +552,7 @@ function useSigmaJelloHud()
 
     hudtextlabel1.Parent = hudframe1
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 100
+    hudtextlabel1.BackgroundTransparency = 1.00
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(-0.122807018, 0, 0.00961538497, 0)
@@ -565,7 +565,7 @@ function useSigmaJelloHud()
 
     hudtextlabel2.Parent = hudframe1
     hudtextlabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel2.BackgroundTransparency = 100
+    hudtextlabel2.BackgroundTransparency = 1.00
     hudtextlabel2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel2.BorderSizePixel = 0
     hudtextlabel2.Position = UDim2.new(-0.232456148, 0, 0.490384609, 0)
@@ -588,7 +588,7 @@ function useLiquidBounceHUD()
 
     hudtextlabel1.Parent = hud
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 100
+    hudtextlabel1.BackgroundTransparency = 1.00
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(0.0164203607, 0, 0.012531328, 0)
@@ -601,7 +601,7 @@ function useLiquidBounceHUD()
 
     hudtextlabel2.Parent = hud
     hudtextlabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel2.BackgroundTransparency = 100
+    hudtextlabel2.BackgroundTransparency = 1.00
     hudtextlabel2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel2.BorderSizePixel = 0
     hudtextlabel2.Position = UDim2.new(0.0106732352, 0, -9.56064472e-09, 0)
