@@ -295,6 +295,35 @@ PlayerTab:CreateButton({
     end,
 })
 
+PlayerTab:CreateButton({
+    Name = 'Ragdoll',
+    Callback = function()
+        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Ragdoll)
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = 'More Animated (R15)',
+    Callback = function()
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            
+            humanoid.RigType = Enum.HumanoidRigType.R15
+        end
+    end,
+})
+
+PlayerTab:CreateButton({
+    Name = 'Less Animated (R6)',
+    Callback = function()
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            local humanoid = player.Character.Humanoid
+            
+            humanoid.RigType = Enum.HumanoidRigType.R6
+        end
+    end,
+})
+
 --exploit
 
 ExploitTab:CreateInput({
@@ -338,12 +367,30 @@ VisualTab:CreateToggle({
 ClientTab:CreateButton({
     Name = 'Self Destruct',
     Callback = function()
-        Rayfield:Destroy()
-        player.Character.Humanoid.WalkSpeed = 16
-        player.Character.Humanoid.JumpPower = 50
-        game.Workspace.Gravity = 196.2
-        destroyHUDS()
-    end,
+        Rayfield:Notify({
+            Title = 'Are you sure?',
+            Content = 'Please confirm you would like to self destruct GPTWare',
+            Duration = 6.5,
+            Image = 18635540561,
+            Actions = {
+                Destruct = {
+                    Name = 'Destruct',
+                    Callback = function()
+                        Rayfield:Destroy()
+                        player.Character.Humanoid.WalkSpeed = 16
+                        player.Character.Humanoid.JumpPower = 50
+                        game.Workspace.Gravity = 196.2
+                        destroyHUDS()
+                    end
+                },
+                Ignore = {
+                    Name = 'Cancel',
+                    Callback = function()
+                    end
+                },
+            }
+        })
+    end
 })
 
 ClientTab:CreateDropdown({
@@ -726,20 +773,10 @@ function teleportToPlayer(targetPlayerName)
     end
 
     if targetPlayer then
-        local targetChar = targetPlayer.Character
-        if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
-            local targetHRP = targetChar.HumanoidRootPart
-            local targetPosition = targetHRP.Position
-            local targetOrientation = targetHRP.CFrame - targetHRP.Position
-
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                local localHRP = character.HumanoidRootPart
-                localHRP.CFrame = CFrame.new(targetPosition) * targetOrientation
-            end
-        else
+        if targetPlayer == player then
             Rayfield:Notify({
                 Title = 'Failed to teleport to player!',
-                Content = 'Target player does not have a HumanoidRootPart.',
+                Content = 'Cannot teleport to yourself',
                 Duration = 6.5,
                 Image = 18635540561,
                 Actions = {
@@ -750,6 +787,32 @@ function teleportToPlayer(targetPlayerName)
                 },
             },
             })
+        else
+            local targetChar = targetPlayer.Character
+            if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+                local targetHRP = targetChar.HumanoidRootPart
+                local targetPosition = targetHRP.Position
+                local targetOrientation = targetHRP.CFrame - targetHRP.Position
+
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    local localHRP = character.HumanoidRootPart
+                    localHRP.CFrame = CFrame.new(targetPosition) * targetOrientation
+                end
+            else
+                Rayfield:Notify({
+                    Title = 'Failed to teleport to player!',
+                    Content = 'Target player does not have a HumanoidRootPart.',
+                    Duration = 6.5,
+                    Image = 18635540561,
+                    Actions = {
+                    Ignore = {
+                        Name = 'Okay!',
+                        Callback = function()
+                    end
+                    },
+                },
+                })
+            end
         end
     else
         Rayfield:Notify({
