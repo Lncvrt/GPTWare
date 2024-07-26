@@ -5,8 +5,8 @@ local userInputService = game:GetService('UserInputService')
 local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 local lighting = game:GetService('Lighting')
 
-local isJumpFlying = false
 local jumpFlyStartHeight = 0;
+local teleportToTargetName
 
 local hud
 local hudframe1
@@ -67,6 +67,8 @@ local MovementPlusTab = Window:CreateTab('Movement Plus', 18633204761)
 
 local PlayerTab = Window:CreateTab('Player', 18633259530)
 
+local ExploitTab = Window:CreateTab('Exploit', 18661856176)
+
 local VisualTab = Window:CreateTab('Visual', 18635495051)
 
 local ClientTab = Window:CreateTab('Client', 18633194275)
@@ -121,10 +123,21 @@ MovementTab:CreateToggle({
     CurrentValue = false,
     Flag = 'JumpFlyToggle',
     Callback = function(Value)
-        isJumpFlying = Value
         if Value then
             jumpFlyStartHeight = player.Character:FindFirstChild('HumanoidRootPart').Position.Y
-            checkJumpFlyingStatus()
+            while Value do
+                local player = game.Players.LocalPlayer
+                local character = player and player.Character
+                local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
+        
+                if humanoidRootPart then
+                    if humanoidRootPart.Position.Y <= jumpFlyStartHeight then
+                        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+        
+                wait(0.01)
+            end
         end
     end,
 })
@@ -167,7 +180,61 @@ MovementTab:CreateButton({
     end,
 })
 
---movement+
+MovementTab:CreateToggle({
+    Name = 'Infinite Jump',
+    CurrentValue = false,
+    Flag = 'InfiniteJumpToggle',
+    Callback = function(Value)
+        local runService = game:GetService("RunService")
+        player = game.Players.LocalPlayer
+        
+        local function onRenderStepped()
+            if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
+            
+            local humanoid = player.Character.Humanoid
+            if humanoid.Jump then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+        
+        local connection
+        
+        if Value then
+            connection = runService.RenderStepped:Connect(onRenderStepped)
+        else
+            if connection then
+                connection:Disconnect()
+            end
+        end
+        
+        while Value do
+            wait()
+            if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
+            
+            local humanoid = player.Character.Humanoid
+            if humanoid.Jump then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+        
+        if connection then
+            connection:Disconnect()
+        end
+    end,
+})
+
+MovementTab:CreateButton({
+    Name = 'Reset Speed',
+    Callback = function()
+        speedIsUpdating = true
+        player.Character.Humanoid.WalkSpeed = 16
+        SpeedSlider:Set(1)
+        SpeedStudsSlider:Set(16)
+        speedIsUpdating = false
+    end,
+})
+
+--movement plus
 
 SpeedStudsSlider = MovementPlusTab:CreateSlider({
     Name = 'Speed',
@@ -228,6 +295,23 @@ PlayerTab:CreateButton({
     end,
 })
 
+--exploit
+
+ExploitTab:CreateInput({
+    Name = 'Teleport To Player Name',
+    PlaceholderText = 'Target Player Name',
+    Callback = function(Text)
+        teleportToTargetName = Text
+    end,
+})
+
+ExploitTab:CreateButton({
+    Name = 'Confirm Teleport',
+    Callback = function()
+        teleportToPlayer(teleportToTargetName)
+    end,
+})
+
 --visual
 
 VisualTab:CreateToggle({
@@ -258,7 +342,6 @@ ClientTab:CreateButton({
         player.Character.Humanoid.WalkSpeed = 16
         player.Character.Humanoid.JumpPower = 50
         game.Workspace.Gravity = 196.2
-        isJumpFlying = false
         destroyHUDS()
     end,
 })
@@ -416,22 +499,6 @@ ScriptsTab:CreateButton({
 })
 
 --actions
-
-function checkJumpFlyingStatus()
-    while isJumpFlying do
-        local player = game.Players.LocalPlayer
-        local character = player and player.Character
-        local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
-
-        if humanoidRootPart then
-            if humanoidRootPart.Position.Y <= jumpFlyStartHeight then
-                player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-            end
-        end
-
-        wait(0.01)
-    end
-end
 
 local function onInputBegan(input, gameProcessedEvent)
     if not gameProcessedEvent then
@@ -646,4 +713,57 @@ function constrainToRange(value, minValue, maxValue)
     end
 
     return value
+end
+
+function teleportToPlayer(targetPlayerName)
+    local targetPlayer = nil
+
+    for _, p in ipairs(game.Players:GetPlayers()) do
+        if p.Name == targetPlayerName then
+            targetPlayer = p
+            break
+        end
+    end
+
+    if targetPlayer then
+        local targetChar = targetPlayer.Character
+        if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+            local targetHRP = targetChar.HumanoidRootPart
+            local targetPosition = targetHRP.Position
+            local targetOrientation = targetHRP.CFrame - targetHRP.Position
+
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                local localHRP = character.HumanoidRootPart
+                localHRP.CFrame = CFrame.new(targetPosition) * targetOrientation
+            end
+        else
+            Rayfield:Notify({
+                Title = 'Failed to teleport to player!',
+                Content = 'Target player does not have a HumanoidRootPart.',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                Ignore = {
+                    Name = 'Okay!',
+                    Callback = function()
+                end
+                },
+            },
+            })
+        end
+    else
+        Rayfield:Notify({
+            Title = 'Failed to teleport to player!',
+            Content = 'Target not found',
+            Duration = 6.5,
+            Image = 18635540561,
+            Actions = {
+            Ignore = {
+                Name = 'Okay!',
+                Callback = function()
+            end
+            },
+        },
+        })
+    end
 end
