@@ -5,6 +5,7 @@ local userInputService = game:GetService('UserInputService')
 local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 local lighting = game:GetService('Lighting')
 
+local isJumpFlying = false
 local jumpFlyStartHeight = 0;
 local teleportToTargetName
 
@@ -123,25 +124,29 @@ MovementTab:CreateToggle({
     CurrentValue = false,
     Flag = 'JumpFlyToggle',
     Callback = function(Value)
+        isJumpFlying = Value
         if Value then
-            jumpFlyStartHeight = player.Character:FindFirstChild('HumanoidRootPart').Position.Y
-            while Value do
-                local player = game.Players.LocalPlayer
-                local character = player and player.Character
-                local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
-        
-                if humanoidRootPart then
-                    if humanoidRootPart.Position.Y <= jumpFlyStartHeight then
-                        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            local player = game.Players.LocalPlayer
+            local character = player and player.Character
+            local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
+            
+            if humanoidRootPart then
+                jumpFlyStartHeight = humanoidRootPart.Position.Y
+                while isJumpFlying do
+                    local humanoidRootPart = character and character:FindFirstChild('HumanoidRootPart')
+                    
+                    if humanoidRootPart then
+                        if humanoidRootPart.Position.Y <= jumpFlyStartHeight then
+                            player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                        end
                     end
+                    
+                    wait(0.01)
                 end
-        
-                wait(0.01)
             end
         end
     end,
 })
-
 MovementTab:CreateButton({
     Name = 'Long Jump',
     Callback = function()
@@ -380,6 +385,7 @@ ClientTab:CreateButton({
                         player.Character.Humanoid.WalkSpeed = 16
                         player.Character.Humanoid.JumpPower = 50
                         game.Workspace.Gravity = 196.2
+                        isJumpFlying = false
                         destroyHUDS()
                     end
                 },
