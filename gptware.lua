@@ -8,6 +8,9 @@ local lighting = game:GetService('Lighting')
 local isJumpFlying = false
 local jumpFlyStartHeight = 0;
 local teleportToTargetName
+local isFlying = false
+local originalVelocity = Vector3.new()
+local bodyVelocity = Instance.new("BodyVelocity")
 
 local hud
 local hudframe1
@@ -31,6 +34,9 @@ local loadedSimpleBypass = false
 local SpeedSlider
 local SpeedStudsSlider
 local speedIsUpdating = false
+
+bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+bodyVelocity.Velocity = Vector3.new(0, 0, 0)
 
 Rayfield:Notify({
    Title = 'GPTWare Executed!',
@@ -120,6 +126,40 @@ MovementTab:CreateSlider({
 })
 
 MovementTab:CreateToggle({
+    Name = 'Fly',
+    CurrentValue = false,
+    Flag = 'FlyToggle',
+    Callback = function(Value)
+        local character = game.Players.LocalPlayer.Character
+        if not character then return end
+        
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if not humanoidRootPart then return end
+        
+        if Value then
+            if not isFlying then
+                isFlying = true
+                originalVelocity = humanoidRootPart.Velocity
+
+                bodyVelocity.Parent = humanoidRootPart
+
+                while isFlying do
+                    local currentVelocity = humanoidRootPart.Velocity
+                    bodyVelocity.Velocity = Vector3.new(currentVelocity.X, 0, currentVelocity.Z)
+                    wait()
+                end
+            end
+        else
+            if isFlying then
+                isFlying = false
+                bodyVelocity.Parent = nil
+                humanoidRootPart.Velocity = Vector3.new(originalVelocity.X, originalVelocity.Y, originalVelocity.Z)
+            end
+        end
+    end,
+})
+
+MovementTab:CreateToggle({
     Name = 'Jump Fly',
     CurrentValue = false,
     Flag = 'JumpFlyToggle',
@@ -147,6 +187,7 @@ MovementTab:CreateToggle({
         end
     end,
 })
+
 MovementTab:CreateButton({
     Name = 'Long Jump',
     Callback = function()
@@ -190,11 +231,11 @@ MovementTab:CreateToggle({
     CurrentValue = false,
     Flag = 'InfiniteJumpToggle',
     Callback = function(Value)
-        local runService = game:GetService("RunService")
+        local runService = game:GetService('RunService')
         player = game.Players.LocalPlayer
         
         local function onRenderStepped()
-            if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
+            if not player.Character or not player.Character:FindFirstChild('Humanoid') then return end
             
             local humanoid = player.Character.Humanoid
             if humanoid.Jump then
@@ -214,7 +255,7 @@ MovementTab:CreateToggle({
         
         while Value do
             wait()
-            if not player.Character or not player.Character:FindFirstChild("Humanoid") then return end
+            if not player.Character or not player.Character:FindFirstChild('Humanoid') then return end
             
             local humanoid = player.Character.Humanoid
             if humanoid.Jump then
@@ -310,7 +351,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'More Animated (R15)',
     Callback = function()
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character and player.Character:FindFirstChild('Humanoid') then
             local humanoid = player.Character.Humanoid
             
             humanoid.RigType = Enum.HumanoidRigType.R15
@@ -321,7 +362,7 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'Less Animated (R6)',
     Callback = function()
-        if player.Character and player.Character:FindFirstChild("Humanoid") then
+        if player.Character and player.Character:FindFirstChild('Humanoid') then
             local humanoid = player.Character.Humanoid
             
             humanoid.RigType = Enum.HumanoidRigType.R6
@@ -386,6 +427,7 @@ ClientTab:CreateButton({
                         player.Character.Humanoid.JumpPower = 50
                         game.Workspace.Gravity = 196.2
                         isJumpFlying = false
+                        isFlying = false
                         destroyHUDS()
                     end
                 },
@@ -795,12 +837,12 @@ function teleportToPlayer(targetPlayerName)
             })
         else
             local targetChar = targetPlayer.Character
-            if targetChar and targetChar:FindFirstChild("HumanoidRootPart") then
+            if targetChar and targetChar:FindFirstChild('HumanoidRootPart') then
                 local targetHRP = targetChar.HumanoidRootPart
                 local targetPosition = targetHRP.Position
                 local targetOrientation = targetHRP.CFrame - targetHRP.Position
 
-                if character and character:FindFirstChild("HumanoidRootPart") then
+                if character and character:FindFirstChild('HumanoidRootPart') then
                     local localHRP = character.HumanoidRootPart
                     localHRP.CFrame = CFrame.new(targetPosition) * targetOrientation
                 end
