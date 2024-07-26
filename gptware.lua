@@ -27,6 +27,10 @@ local originalExposureCompensation = lighting.ExposureCompensation
 local loadedInfiniteYield = false
 local loadedSimpleBypass = false
 
+local SpeedSlider
+local SpeedStudsSlider
+local speedIsUpdating = false
+
 Rayfield:Notify({
    Title = 'GPTWare Executed!',
    Content = 'GPTWare has been Successfully executed!',
@@ -59,6 +63,8 @@ local Window = Rayfield:CreateWindow({
 
 local MovementTab = Window:CreateTab('Movement', 18633204761)
 
+local MovementPlusTab = Window:CreateTab('Movement+', 18657993756)
+
 local PlayerTab = Window:CreateTab('Player', 18633259530)
 
 local VisualTab = Window:CreateTab('Visual', 18635495051)
@@ -69,15 +75,20 @@ local ScriptsTab = Window:CreateTab('Scripts', 18636073939)
 
 --movement
 
-MovementTab:CreateSlider({
+SpeedSlider = MovementTab:CreateSlider({
     Name = 'Speed',
     Range = {1, 25},
-    Increment = 0.5,
+    Increment = 0.25,
     Suffix = 'Modifier',
     CurrentValue = 1,
     Flag = 'SpeedSlider',
     Callback = function(Value)
-        player.Character.Humanoid.WalkSpeed = Value * 16
+        if not speedIsUpdating then
+            speedIsUpdating = true
+            player.Character.Humanoid.WalkSpeed = Value * 16
+            SpeedStudsSlider:Set(Value * 16)
+            speedIsUpdating = false
+        end
     end,
 })
 
@@ -96,7 +107,7 @@ MovementTab:CreateSlider({
 MovementTab:CreateSlider({
     Name = 'Gravity Modifier',
     Range = {-25, 25},
-    Increment = 0.5,
+    Increment = 0.25,
     Suffix = 'Modifier',
     CurrentValue = 1,
     Flag = 'GravitySlider',
@@ -156,7 +167,24 @@ MovementTab:CreateButton({
     end,
 })
 
+--movement+
 
+SpeedStudsSlider = MovementPlusTab:CreateSlider({
+    Name = 'Speed',
+    Range = {1, 400},
+    Increment = 1,
+    Suffix = 'Studs',
+    CurrentValue = 16,
+    Flag = 'SpeedStudsSlider',
+    Callback = function(Value)
+        if not speedIsUpdating then
+            speedIsUpdating = true
+            player.Character.Humanoid.WalkSpeed = Value
+            SpeedSlider:Set(constrainToRange(roundIncremental(Value / 16, 0.25), 1, 25))
+            speedIsUpdating = false
+        end
+    end,
+})
 
 --player
 
@@ -179,9 +207,27 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'Suicide',
     Callback = function()
-         player.Character:FindFirstChild('Head'):Destroy()
+        local head = player.Character:FindFirstChild('Head')
+        if head then
+            head:Destroy()
+        else
+            Rayfield:Notify({
+                Title = 'Error running Suicide',
+                Content = 'Unable to suicide',
+                Duration = 6.5,
+                Image = 18635540561,
+                Actions = {
+                   Ignore = {
+                      Name = 'Okay!',
+                      Callback = function()
+                   end
+                },
+            },
+            })
+        end
     end,
 })
+
 --visual
 
 VisualTab:CreateToggle({
@@ -463,7 +509,7 @@ function useGPTWareHud()
 
     hudtextlabel1.Parent = hudframe1
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 1.000
+    hudtextlabel1.BackgroundTransparency = 100
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(0, 0, 0.32294035, 0)
@@ -498,7 +544,7 @@ function useSigmaJelloHud()
 
     hudframe1.Parent = hud
     hudframe1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudframe1.BackgroundTransparency = 1.000
+    hudframe1.BackgroundTransparency = 100
     hudframe1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudframe1.BorderSizePixel = 0
     hudframe1.Position = UDim2.new(0.0209999997, 0, 0.0209999997, 0)
@@ -506,7 +552,7 @@ function useSigmaJelloHud()
 
     hudtextlabel1.Parent = hudframe1
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 1.000
+    hudtextlabel1.BackgroundTransparency = 100
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(-0.122807018, 0, 0.00961538497, 0)
@@ -519,7 +565,7 @@ function useSigmaJelloHud()
 
     hudtextlabel2.Parent = hudframe1
     hudtextlabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel2.BackgroundTransparency = 1.000
+    hudtextlabel2.BackgroundTransparency = 100
     hudtextlabel2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel2.BorderSizePixel = 0
     hudtextlabel2.Position = UDim2.new(-0.232456148, 0, 0.490384609, 0)
@@ -542,7 +588,7 @@ function useLiquidBounceHUD()
 
     hudtextlabel1.Parent = hud
     hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel1.BackgroundTransparency = 1.000
+    hudtextlabel1.BackgroundTransparency = 100
     hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel1.BorderSizePixel = 0
     hudtextlabel1.Position = UDim2.new(0.0164203607, 0, 0.012531328, 0)
@@ -555,7 +601,7 @@ function useLiquidBounceHUD()
 
     hudtextlabel2.Parent = hud
     hudtextlabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel2.BackgroundTransparency = 1.000
+    hudtextlabel2.BackgroundTransparency = 100
     hudtextlabel2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudtextlabel2.BorderSizePixel = 0
     hudtextlabel2.Position = UDim2.new(0.0106732352, 0, -9.56064472e-09, 0)
@@ -567,3 +613,34 @@ function useLiquidBounceHUD()
 end
 
 useGPTWareHud()
+
+--functions
+
+function round(num, decimals)
+    local multiplier = 10 ^ (decimals or 0)
+    return math.floor(num * multiplier + 0.5) / multiplier
+end
+
+function roundIncremental(value, increment)
+    return round(value / increment) * increment
+end
+
+function min(a, b)
+    return a < b and a or b
+end
+
+function max(a, b)
+    return a > b and a or b
+end
+
+function constrainToRange(value, minValue, maxValue)
+    if value < minValue then
+        return minValue
+    end
+
+    if value > maxValue then
+        return maxValue
+    end
+
+    return value
+end
