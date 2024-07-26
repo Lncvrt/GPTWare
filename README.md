@@ -1,5 +1,5 @@
 # GPTWare
-A script made by both me and [@loqrp](https://github.com/loqrp), and ChatGPT. It's not really the best script and has a lot of bugs. But it has a few misc features.
+A universal script made by both [@Lncvrt](https://github.com/Lncvrt) and [@Loqrp](https://github.com/Loqrp), and ChatGPT. It's not really the best script and has a lot of bugs. But it has a few misc features.
 
 ## Script
 Use the code below in a Roblox Executor to run the script
