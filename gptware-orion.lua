@@ -36,7 +36,7 @@ bodyVelocity.Velocity = Vector3.new(0, 0, 0)
 
 local clientTheme = Color3.fromRGB(134, 26, 240)
 
-local Window = OrionLib:MakeWindow({Name = 'GPTWare', HidePremium = false, SaveConfig = true, ConfigFolder = 'GPTWare'})
+local Window = OrionLib:MakeWindow({Name = 'GPTWare', HidePremium = false, SaveConfig = true, ConfigFolder = 'GPTWare', IntroEnabled = false})
 
 local MovementTab = Window:MakeTab({
     Name = 'Movement',
@@ -441,30 +441,20 @@ ClientTab:AddDropdown({
     Default = 'GPTWare',
     Options = {'GPTWare', 'Sigma Jello', 'LiquidBounce', 'None'},
     Callback = function(Option)
-        local optionFound = false
-        for _, value in ipairs(Option) do
-            if value == 'GPTWare' then
-                optionFound = true
-                destroyHUDS()
-                useGPTWareHud()
-                break
-            elseif value == 'Sigma Jello' then
-                optionFound = true
-                destroyHUDS()
-                useSigmaJelloHud()
-                break
-            elseif value == 'LiquidBounce' then
-                optionFound = true
-                destroyHUDS()
-                useLiquidBounceHUD()
-                break
-            elseif value == 'None' then
-                optionFound = true
-                destroyHUDS()
-                break
-            end
-        end
-        if not optionFound then
+        if Option == 'GPTWare' then
+            optionFound = true
+            destroyHUDS()
+            useGPTWareHud()
+        elseif Option == 'Sigma Jello' then
+            optionFound = true
+            destroyHUDS()
+            useSigmaJelloHud()
+        elseif Option == 'LiquidBounce' then
+            optionFound = true
+            destroyHUDS()
+            useLiquidBounceHUD()
+        elseif Option == 'None' then
+            optionFound = true
             destroyHUDS()
         end
     end,
