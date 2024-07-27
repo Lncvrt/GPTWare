@@ -303,7 +303,7 @@ SpeedStudsSlider = MovementPlusTab:CreateSlider({
 
 MovementPlusTab:CreateSlider({
     Name = 'VClip Amount',
-    Range = {-200, 200},
+    Range = {-400, 400},
     Increment = 0.25,
     Suffix = 'Amount',
     CurrentValue = 75,
@@ -327,7 +327,7 @@ MovementPlusTab:CreateButton({
 
 MovementPlusTab:CreateSlider({
     Name = 'HClip Amount',
-    Range = {-200, 200},
+    Range = {-400, 400},
     Increment = 0.25,
     Suffix = 'Amount',
     CurrentValue = 75,
