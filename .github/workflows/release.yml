@@ -62,3 +62,31 @@ jobs:
                     -H "Content-Type: application/json" \
                     -H "Type: orion" \
                     -d "{\"content\":\"$encoded_content\"}"
+    release-lt2:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Check if LT2 script exists
+              id: check_file
+              run: |
+                  if [ -f "gptware_lt2.lua" ]; then
+                    echo "LT2 Script exists"
+                    echo "lt2_script_exists=true" >> $GITHUB_ENV
+                  else
+                    echo "LT2 Script does not exist"
+                    exit 1
+                  fi
+
+            - name: Send data to server
+              if: env.lt2_script_exists == 'true'
+              run: |
+                  encoded_content=$(base64 -w 0 gptware-lt2.lua)
+                  echo "Sending POST request with encoded content"
+                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                    -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
+                    -H "Content-Type: application/json" \
+                    -H "Type: lt2" \
+                    -d "{\"content\":\"$encoded_content\"}"
