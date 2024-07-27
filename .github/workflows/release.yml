@@ -1,0 +1,35 @@
+name: Release GPTWare
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Check if main script exists
+              id: check_file
+              run: |
+                  if [ -f "gptware.lua" ]; then
+                    echo "Main Script exists"
+                    echo "main_script_exists=true" >> $GITHUB_ENV
+                  else
+                    echo "Main Script does not exist"
+                    exit 1
+                  fi
+
+            - name: Send data to server
+              if: env.main_script_exists == 'true'
+              run: |
+                  encoded_content=$(base64 -w 0 gptware.lua)
+                  echo "Sending POST request with encoded content"
+                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                    -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
+                    -H "Content-Type: application/json" \
+                    -d "{\"content\":\"$encoded_content\"}"
