@@ -1,8 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local player = game.Players.LocalPlayer
 local userInputService = game:GetService('UserInputService')
-local character = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 local lighting = game:GetService('Lighting')
 
 local isJumpFlying = false
@@ -10,7 +8,8 @@ local jumpFlyStartHeight = 0;
 local teleportToTargetName
 local isFlying = false
 local originalVelocity = Vector3.new()
-local bodyVelocity = Instance.new("BodyVelocity")
+local bodyVelocity = Instance.new('BodyVelocity')
+local VClipAmountSlider = 75
 
 local hud
 local hudframe1
@@ -37,6 +36,8 @@ local speedIsUpdating = false
 
 bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+
+local clientTheme = Color3.fromRGB(134, 26, 240)
 
 Rayfield:Notify({
    Title = 'GPTWare Executed!',
@@ -94,7 +95,7 @@ SpeedSlider = MovementTab:CreateSlider({
     Callback = function(Value)
         if not speedIsUpdating then
             speedIsUpdating = true
-            player.Character.Humanoid.WalkSpeed = Value * 16
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value * 16
             SpeedStudsSlider:Set(Value * 16)
             speedIsUpdating = false
         end
@@ -109,7 +110,7 @@ MovementTab:CreateSlider({
     CurrentValue = 1,
     Flag = 'JumpPowerSlider',
     Callback = function(Value)
-        player.Character.Humanoid.JumpPower = Value * 50
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value * 50
     end,
 })
 
@@ -133,7 +134,7 @@ MovementTab:CreateToggle({
         local character = game.Players.LocalPlayer.Character
         if not character then return end
         
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        local humanoidRootPart = character:FindFirstChild('HumanoidRootPart')
         if not humanoidRootPart then return end
         
         if Value then
@@ -191,11 +192,11 @@ MovementTab:CreateToggle({
 MovementTab:CreateButton({
     Name = 'Long Jump',
     Callback = function()
-        if player.Character.Humanoid.FloorMaterial.Name == 'Air' then
+        if game.Players.LocalPlayer.Character.Humanoid.FloorMaterial.Name == 'Air' then
             Rayfield:Notify({
                 Title = 'Error running Long Jump',
                 Content = 'You must be on the ground to use this module!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                    Ignore = {
@@ -232,7 +233,7 @@ MovementTab:CreateToggle({
     Flag = 'InfiniteJumpToggle',
     Callback = function(Value)
         local runService = game:GetService('RunService')
-        player = game.Players.LocalPlayer
+        local player = game.Players.LocalPlayer
         
         local function onRenderStepped()
             if not player.Character or not player.Character:FindFirstChild('Humanoid') then return end
@@ -273,7 +274,7 @@ MovementTab:CreateButton({
     Name = 'Reset Speed',
     Callback = function()
         speedIsUpdating = true
-        player.Character.Humanoid.WalkSpeed = 16
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
         SpeedSlider:Set(1)
         SpeedStudsSlider:Set(16)
         speedIsUpdating = false
@@ -292,9 +293,33 @@ SpeedStudsSlider = MovementPlusTab:CreateSlider({
     Callback = function(Value)
         if not speedIsUpdating then
             speedIsUpdating = true
-            player.Character.Humanoid.WalkSpeed = Value
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
             SpeedSlider:Set(constrainToRange(roundIncremental(Value / 16, 0.25), 1, 25))
             speedIsUpdating = false
+        end
+    end,
+})
+
+MovementPlusTab:CreateSlider({
+    Name = 'VClip Amount',
+    Range = {-200, 200},
+    Increment = 0.25,
+    Suffix = 'Amount',
+    CurrentValue = 75,
+    Flag = 'VClipAmountSlider',
+    Callback = function(Value)
+        VClipAmountSlider = Value
+    end,
+})
+
+MovementPlusTab:CreateButton({
+    Name = 'Confirm VClip',
+    Callback = function()
+        local pos = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+        local humanoidRootPart = game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
+
+        if humanoidRootPart then
+            humanoidRootPart.CFrame = CFrame.new(pos.X, pos.Y + VClipAmountSlider, pos.Z)
         end
     end,
 })
@@ -306,28 +331,28 @@ PlayerTab:CreateToggle({
     CurrentValue = false,
     Flag = 'SitStateButton',
     Callback = function(Value)
-        player.Character.Humanoid.Sit = Value
+        game.Players.LocalPlayer.Character.Humanoid.Sit = Value
     end,
 })
 
 PlayerTab:CreateButton({
     Name = 'Jump',
     Callback = function()
-        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
     end,
 })
 
 PlayerTab:CreateButton({
     Name = 'Suicide',
     Callback = function()
-        local head = player.Character:FindFirstChild('Head')
+        local head = game.Players.LocalPlayer.Character:FindFirstChild('Head')
         if head then
             head:Destroy()
         else
             Rayfield:Notify({
                 Title = 'Error running Suicide',
                 Content = 'Unable to suicide',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                    Ignore = {
@@ -344,15 +369,15 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'Ragdoll',
     Callback = function()
-        player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Ragdoll)
+        game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Ragdoll)
     end,
 })
 
 PlayerTab:CreateButton({
     Name = 'More Animated (R15)',
     Callback = function()
-        if player.Character and player.Character:FindFirstChild('Humanoid') then
-            local humanoid = player.Character.Humanoid
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('Humanoid') then
+            local humanoid = game.Players.LocalPlayer.Character.Humanoid
             
             humanoid.RigType = Enum.HumanoidRigType.R15
         end
@@ -362,8 +387,8 @@ PlayerTab:CreateButton({
 PlayerTab:CreateButton({
     Name = 'Less Animated (R6)',
     Callback = function()
-        if player.Character and player.Character:FindFirstChild('Humanoid') then
-            local humanoid = player.Character.Humanoid
+        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild('Humanoid') then
+            local humanoid = game.Players.LocalPlayer.Character.Humanoid
             
             humanoid.RigType = Enum.HumanoidRigType.R6
         end
@@ -416,15 +441,15 @@ ClientTab:CreateButton({
         Rayfield:Notify({
             Title = 'Are you sure?',
             Content = 'Please confirm you would like to self destruct GPTWare',
-            Duration = 6.5,
+            Duration = 3,
             Image = 18635540561,
             Actions = {
                 Destruct = {
                     Name = 'Destruct',
                     Callback = function()
                         Rayfield:Destroy()
-                        player.Character.Humanoid.WalkSpeed = 16
-                        player.Character.Humanoid.JumpPower = 50
+                        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+                        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
                         game.Workspace.Gravity = 196.2
                         isJumpFlying = false
                         isFlying = false
@@ -477,6 +502,17 @@ ClientTab:CreateDropdown({
     end,
 })
 
+ClientTab:CreateColorPicker({
+    Name = "Client Theme",
+    Color = Color3.fromRGB(134, 26, 240),
+    Flag = "ClientThemeColorPicker",
+    Callback = function(Color)
+        clientTheme = Color
+        if hudframe2 and hudframe2.BackgroundColor3 then hudframe2.BackgroundColor3 = Color end
+        if hudtextlabel2 and hudtextlabel2.TextColor3 then hudtextlabel2.TextColor3 = Color end
+    end
+})
+
 --scripts
 
 ScriptsTab:CreateButton({
@@ -488,7 +524,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
                 Content = 'Infinite Yield has been loaded successfully!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -503,7 +539,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Failed to load external script!',
                 Content = 'Infinite Yield has already been loaded!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -526,7 +562,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
                 Content = 'SimpleBypass has been loaded successfully!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -541,7 +577,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Failed to load external script!',
                 Content = 'SimpleBypass has already been loaded!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -564,7 +600,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Successfully loaded external script!',
                 Content = 'Vehicle Legends Auto Farmer has been loaded successfully!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -579,7 +615,7 @@ ScriptsTab:CreateButton({
             Rayfield:Notify({
                 Title = 'Failed to load external script!',
                 Content = 'Vehicle Legends Auto Farmer has already been loaded!',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -615,6 +651,7 @@ end
 
 local function updateJumpFlyHeight()
     while true do
+        local character = game.Players.LocalPlayer.Character
         local characterPosition = character.PrimaryPart.Position
         local groundHeight = workspace.Terrain:WorldToCellPreferFull(characterPosition).Y * workspace.Terrain.CellSize.Y
         if spacePressed then
@@ -688,7 +725,7 @@ function useGPTWareHud()
     hudtextlabel1.TextWrapped = true
 
     hudframe2.Parent = hudframe1
-    hudframe2.BackgroundColor3 = Color3.fromRGB(134, 26, 240)
+    hudframe2.BackgroundColor3 = clientTheme
     hudframe2.BorderColor3 = Color3.fromRGB(0, 0, 0)
     hudframe2.BorderSizePixel = 0
     hudframe2.Position = UDim2.new(0.0270000007, 0, 0.200000003, 0)
@@ -773,7 +810,7 @@ function useLiquidBounceHUD()
     hudtextlabel2.Size = UDim2.new(0, 207, 0, 68)
     hudtextlabel2.Font = Enum.Font.SourceSansBold
     hudtextlabel2.Text = 'GPTBounce'
-    hudtextlabel2.TextColor3 = Color3.fromRGB(8, 116, 255)
+    hudtextlabel2.TextColor3 = clientTheme
     hudtextlabel2.TextSize = 56.000
 end
 
@@ -811,6 +848,7 @@ function constrainToRange(value, minValue, maxValue)
 end
 
 function teleportToPlayer(targetPlayerName)
+    local character = game.Players.LocalPlayer.Character
     local targetPlayer = nil
 
     for _, p in ipairs(game.Players:GetPlayers()) do
@@ -821,11 +859,11 @@ function teleportToPlayer(targetPlayerName)
     end
 
     if targetPlayer then
-        if targetPlayer == player then
+        if targetPlayer == game.Players.LocalPlayer then
             Rayfield:Notify({
                 Title = 'Failed to teleport to player!',
                 Content = 'Cannot teleport to yourself',
-                Duration = 6.5,
+                Duration = 3,
                 Image = 18635540561,
                 Actions = {
                 Ignore = {
@@ -850,7 +888,7 @@ function teleportToPlayer(targetPlayerName)
                 Rayfield:Notify({
                     Title = 'Failed to teleport to player!',
                     Content = 'Target player does not have a HumanoidRootPart.',
-                    Duration = 6.5,
+                    Duration = 3,
                     Image = 18635540561,
                     Actions = {
                     Ignore = {
@@ -866,7 +904,7 @@ function teleportToPlayer(targetPlayerName)
         Rayfield:Notify({
             Title = 'Failed to teleport to player!',
             Content = 'Target not found',
-            Duration = 6.5,
+            Duration = 3,
             Image = 18635540561,
             Actions = {
             Ignore = {
