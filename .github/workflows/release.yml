@@ -6,7 +6,7 @@ on:
             - main
 
 jobs:
-    release:
+    release-main:
         runs-on: ubuntu-latest
 
         steps:
@@ -32,4 +32,33 @@ jobs:
                   curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
+                    -H "Type: main" \
+                    -d "{\"content\":\"$encoded_content\"}"
+    release-orion:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Check if main script exists
+              id: check_file
+              run: |
+                  if [ -f "gptware-orion.lua" ]; then
+                    echo "Orion Script exists"
+                    echo "orion_script_exists=true" >> $GITHUB_ENV
+                  else
+                    echo "Orion Script does not exist"
+                    exit 1
+                  fi
+
+            - name: Send data to server
+              if: env.main_script_exists == 'true'
+              run: |
+                  encoded_content=$(base64 -w 0 gptware-orion.lua)
+                  echo "Sending POST request with encoded content"
+                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                    -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
+                    -H "Content-Type: application/json" \
+                    -H "Type: orion" \
                     -d "{\"content\":\"$encoded_content\"}"

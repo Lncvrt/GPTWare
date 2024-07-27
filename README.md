@@ -10,6 +10,12 @@ Use the code below in a Roblox Executor to run the script
 loadstring(game:HttpGet("https://www.lncvrt.xyz/api/gptware/free-script"))()
 ```
 
+### Orion Test Script
+
+```lua
+loadstring(game:HttpGet("https://www.lncvrt.xyz/api/gptware/free-script?type=orion"))()
+```
+
 ## Discord / Support / Bug Reports
 
 Join the [Discord](https://discord.gg/EZTTvr27cA) for help and bug reports, or if you just want to.
