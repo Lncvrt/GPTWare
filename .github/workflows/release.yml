@@ -72,7 +72,7 @@ jobs:
             - name: Check if LT2 script exists
               id: check_file
               run: |
-                  if [ -f "gptware_lt2.lua" ]; then
+                  if [ -f "gptware-lt2.lua" ]; then
                     echo "LT2 Script exists"
                     echo "lt2_script_exists=true" >> $GITHUB_ENV
                   else
