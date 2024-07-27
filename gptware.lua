@@ -9,7 +9,8 @@ local teleportToTargetName
 local isFlying = false
 local originalVelocity = Vector3.new()
 local bodyVelocity = Instance.new('BodyVelocity')
-local VClipAmountSlider = 75
+local VClipAmountValue = 75
+local HClipAmountValue = 75
 
 local hud
 local hudframe1
@@ -308,7 +309,7 @@ MovementPlusTab:CreateSlider({
     CurrentValue = 75,
     Flag = 'VClipAmountSlider',
     Callback = function(Value)
-        VClipAmountSlider = Value
+        VClipAmountValue = Value
     end,
 })
 
@@ -319,7 +320,40 @@ MovementPlusTab:CreateButton({
         local humanoidRootPart = game.Players.LocalPlayer.Character:FindFirstChild('HumanoidRootPart')
 
         if humanoidRootPart then
-            humanoidRootPart.CFrame = CFrame.new(pos.X, pos.Y + VClipAmountSlider, pos.Z)
+            humanoidRootPart.CFrame = CFrame.new(pos.X, pos.Y + VClipAmountValue, pos.Z)
+        end
+    end,
+})
+
+MovementPlusTab:CreateSlider({
+    Name = 'HClip Amount',
+    Range = {-200, 200},
+    Increment = 0.25,
+    Suffix = 'Amount',
+    CurrentValue = 75,
+    Flag = 'HClipAmountSlider',
+    Callback = function(Value)
+        HClipAmountValue = Value
+    end,
+})
+
+MovementPlusTab:CreateButton({
+    Name = 'Confirm HClip',
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        local character = player.Character
+        local humanoidRootPart = character:FindFirstChild('HumanoidRootPart')
+        local camera = workspace.CurrentCamera
+
+        if humanoidRootPart and camera then
+            local playerPosition = humanoidRootPart.Position
+            local cameraCFrame = camera.CFrame
+
+            local forwardVector = cameraCFrame.LookVector
+            local moveDirection = forwardVector * HClipAmountValue
+            local newPosition = playerPosition + moveDirection
+
+            humanoidRootPart.CFrame = CFrame.new(newPosition.X, playerPosition.Y, newPosition.Z)
         end
     end,
 })
