@@ -104,6 +104,18 @@ ClientTab:AddButton({
     end
 })
 
+ClientTab:AddButton({
+    Name = 'Switch to GPTWare: Normal Edition (free)',
+    Callback = function()
+        OrionLib:Destroy()
+        isSpeedHacking = false
+        speedHackValue = 16
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        loadstring(game:HttpGet("https://www.lncvrt.xyz/api/gptware/script?type=free"))()
+    end
+})
+
 --actions
 
 scriptIsLoading = false

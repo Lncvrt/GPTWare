@@ -30,6 +30,7 @@ local originalExposureCompensation = lighting.ExposureCompensation
 
 local loadedInfiniteYield = false
 local loadedSimpleBypass = false
+local loadedVehicleLegendsAutoFarmer = false
 
 local SpeedSlider
 local SpeedStudsSlider
@@ -550,6 +551,20 @@ ClientTab:CreateColorPicker({
 --scripts
 
 ScriptsTab:CreateButton({
+    Name = 'GPTWare: LT2 Edition',
+    Callback = function()
+        Rayfield:Destroy()
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+        game.Workspace.Gravity = 196.2
+        isJumpFlying = false
+        isFlying = false
+        destroyHUDS()
+        loadstring(game:HttpGet("https://www.lncvrt.xyz/api/gptware/script?type=lt2"))()
+    end,
+})
+
+ScriptsTab:CreateButton({
     Name = 'Infinite Yield',
     Callback = function()
         if not loadedInfiniteYield then
@@ -628,7 +643,7 @@ ScriptsTab:CreateButton({
 ScriptsTab:CreateButton({
     Name = 'Vehicle Legends Auto Farmer',
     Callback = function()
-        if not loadedSimpleBypass then
+        if not loadedVehicleLegendsAutoFarmer then
             print('Loading Vehicle Legends Auto Farmer')
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Marco8642/science/main/Vehicle%20legends'))()
             Rayfield:Notify({
@@ -644,7 +659,7 @@ ScriptsTab:CreateButton({
                 },
             },
             })
-            loadedSimpleBypass = true
+            loadedVehicleLegendsAutoFarmer = true
         else
             Rayfield:Notify({
                 Title = 'Failed to load external script!',
