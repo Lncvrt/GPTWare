@@ -28,13 +28,12 @@ local originalOutdoorAmbient = lighting.OutdoorAmbient
 local originalBrightness = lighting.Brightness
 local originalExposureCompensation = lighting.ExposureCompensation
 
-local loadedInfiniteYield = false
-local loadedSimpleBypass = false
-
 bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 bodyVelocity.Velocity = Vector3.new(0, 0, 0)
 
 local clientTheme = Color3.fromRGB(134, 26, 240)
+
+local isLoading = true
 
 local Window = OrionLib:MakeWindow({Name = 'GPTWare', HidePremium = false, SaveConfig = true, ConfigFolder = 'GPTWare', IntroEnabled = false})
 
@@ -441,6 +440,7 @@ ClientTab:AddDropdown({
     Default = 'GPTWare',
     Options = {'GPTWare', 'Sigma Jello', 'LiquidBounce', 'None'},
     Callback = function(Option)
+        if isLoading then return end
         if Option == 'GPTWare' then
             optionFound = true
             destroyHUDS()
@@ -741,3 +741,7 @@ function teleportToPlayer(targetPlayerName)
         })
     end
 end
+
+--end
+
+isLoading = false
