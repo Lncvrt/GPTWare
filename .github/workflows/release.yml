@@ -4,14 +4,23 @@ on:
     push:
         branches:
             - main
+        paths:
+            - "gptware.lua"
+            - "gptware-orion.lua"
+            - "gptware-lt2.lua"
 
 jobs:
     release-main:
         runs-on: ubuntu-latest
+        if: contains(github.event.head_commit.message, 'gptware.lua')
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+
+            - name: Get commit ID
+              id: get_commit_id
+              run: echo "commit_id=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
             - name: Check if main script exists
               id: check_file
@@ -33,13 +42,20 @@ jobs:
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: main" \
+                    -H "Commit: ${{ env.commit_id }}" \
                     -d "{\"content\":\"$encoded_content\"}"
+
     release-orion:
         runs-on: ubuntu-latest
+        if: contains(github.event.head_commit.message, 'gptware-orion.lua')
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+
+            - name: Get commit ID
+              id: get_commit_id
+              run: echo "commit_id=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
             - name: Check if orion script exists
               id: check_file
@@ -61,13 +77,20 @@ jobs:
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: orion" \
+                    -H "Commit: ${{ env.commit_id }}" \
                     -d "{\"content\":\"$encoded_content\"}"
+
     release-lt2:
         runs-on: ubuntu-latest
+        if: contains(github.event.head_commit.message, 'gptware-lt2.lua')
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v3
+
+            - name: Get commit ID
+              id: get_commit_id
+              run: echo "commit_id=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
             - name: Check if LT2 script exists
               id: check_file
@@ -89,4 +112,5 @@ jobs:
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: lt2" \
+                    -H "Commit: ${{ env.commit_id }}" \
                     -d "{\"content\":\"$encoded_content\"}"
