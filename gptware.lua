@@ -287,8 +287,8 @@ MovementTab:CreateButton({
 
 SpeedStudsSlider = MovementPlusTab:CreateSlider({
     Name = 'Speed',
-    Range = {1, 400},
-    Increment = 1,
+    Range = {16, 400},
+    Increment = 4,
     Suffix = 'Studs',
     CurrentValue = 16,
     Flag = 'SpeedStudsSlider',
