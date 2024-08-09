@@ -438,7 +438,7 @@ ClientTab:AddButton({
 ClientTab:AddDropdown({
     Name = 'HUD',
     Default = 'GPTWare',
-    Options = {'GPTWare', 'Sigma Jello', 'LiquidBounce', 'None'},
+    Options = {'GPTWare', 'Sigma Jello', 'LiquidBounce', 'GameSense', 'None'},
     Callback = function(Option)
         if isLoading then return end
         if Option == 'GPTWare' then
@@ -453,6 +453,10 @@ ClientTab:AddDropdown({
             optionFound = true
             destroyHUDS()
             useLiquidBounceHUD()
+        elseif Option == 'GameSense' then
+            optionFound = true
+            destroyHUDS()
+            useGameSenseHUD()
         elseif Option == 'None' then
             optionFound = true
             destroyHUDS()
@@ -522,10 +526,13 @@ function destroyHUDS()
     if hud and hud.Parent then hud:Destroy() end
     if hudframe1 and hudframe1.Parent then hudframe1:Destroy() end
     if hudframe2 and hudframe2.Parent then hudframe2:Destroy() end
+    if hudframe3 and hudframe3.Parent then hudframe3:Destroy() end
+    if hudframe4 and hudframe4.Parent then hudframe4:Destroy() end
     if hudicorner1 and hudicorner1.Parent then hudicorner1:Destroy() end
     if hudicorner2 and hudicorner2.Parent then hudicorner2:Destroy() end
     if hudtextlabel1 and hudtextlabel1.Parent then hudtextlabel1:Destroy() end
     if hudtextlabel2 and hudtextlabel2.Parent then hudtextlabel2:Destroy() end
+    if hudtextlabel3 and hudtextlabel3.Parent then hudtextlabel3:Destroy() end
 end
 
 function useGPTWareHud()
@@ -653,6 +660,87 @@ function useLiquidBounceHUD()
     hudtextlabel2.Text = 'GPTBounce'
     hudtextlabel2.TextColor3 = clientTheme
     hudtextlabel2.TextSize = 56.000
+end
+
+function useGameSenseHUD()
+    hud = Instance.new("ScreenGui")
+    hudframe1 = Instance.new('Frame')
+    hudframe2 = Instance.new('Frame')
+    hudframe3 = Instance.new('Frame')
+    hudframe4 = Instance.new('Frame')
+    hudtextlabel1 = Instance.new("TextLabel")
+    hudtextlabel2 = Instance.new("TextLabel")
+    hudtextlabel3 = Instance.new("TextLabel")
+
+    hud.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+    hudframe1.Parent = hud
+    hudframe1.BackgroundColor3 = Color3.fromRGB(21, 21, 23)
+    hudframe1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudframe1.BorderSizePixel = 0
+    hudframe1.Position = UDim2.new(0.00800001342, 0, 0.0179999974, 0)
+    hudframe1.Size = UDim2.new(0, 218, 0, 24)
+
+    hudframe2.Parent = hudframe1
+    hudframe2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    hudframe2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudframe2.BorderSizePixel = 0
+    hudframe2.Position = UDim2.new(0, -6, 0, -6)
+    hudframe2.Size = UDim2.new(0, 229, 0, 35)
+
+    hudframe3.Parent = hudframe1
+    hudframe3.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    hudframe3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudframe3.BorderSizePixel = 0
+    hudframe3.Position = UDim2.new(0, -3, 0, -3)
+    hudframe3.Size = UDim2.new(0, 223, 0, 29)
+
+    hudframe4.Parent = hudframe1
+    hudframe4.BackgroundColor3 = Color3.fromRGB(21, 21, 23)
+    hudframe4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudframe4.BorderSizePixel = 0
+    hudframe4.Position = UDim2.new(6.99944422e-08, 0, 0, 0)
+    hudframe4.Size = UDim2.new(0, 217, 0, 23)
+
+    hudtextlabel1.Parent = hudframe1
+    hudtextlabel1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    hudtextlabel1.BackgroundTransparency = 1.000
+    hudtextlabel1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudtextlabel1.BorderSizePixel = 0
+    hudtextlabel1.Position = UDim2.new(-0.19465968, 0, -0.00225568493, 0)
+    hudtextlabel1.Size = UDim2.new(0, 192, 0, 28)
+    hudtextlabel1.Font = Enum.Font.JosefinSans
+    hudtextlabel1.Text = "      Ware"
+    hudtextlabel1.TextColor3 = Color3.fromRGB(57, 189, 55)
+    hudtextlabel1.TextSize = 19.000
+    hudtextlabel1.TextWrapped = true
+
+    hudtextlabel2.Parent = hudframe1
+    hudtextlabel2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    hudtextlabel2.BackgroundTransparency = 1.000
+    hudtextlabel2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudtextlabel2.BorderSizePixel = 0
+    hudtextlabel2.Position = UDim2.new(-0.19180721, 0, -0.00199999125, 0)
+    hudtextlabel2.Size = UDim2.new(0, 192, 0, 28)
+    hudtextlabel2.Font = Enum.Font.JosefinSans
+    hudtextlabel2.Text = "GPT        "
+    hudtextlabel2.TextColor3 = Color3.fromRGB(206, 206, 206)
+    hudtextlabel2.TextSize = 19.000
+    hudtextlabel2.TextWrapped = true
+
+    hudtextlabel3.Parent = hudframe1
+    hudtextlabel3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    hudtextlabel3.BackgroundTransparency = 1.000
+    hudtextlabel3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudtextlabel3.BorderSizePixel = 0
+    hudtextlabel3.Position = UDim2.new(0.270642191, 0, -0.00199996959, 0)
+    hudtextlabel3.Size = UDim2.new(0, 192, 0, 28)
+    hudtextlabel3.Font = Enum.Font.JosefinSans
+    hudtextlabel3.Text = "694 FPS"
+    hudtextlabel3.TextColor3 = Color3.fromRGB(206, 206, 206)
+    hudtextlabel3.TextSize = 19.000
+    hudtextlabel3.TextWrapped = true
 end
 
 useGPTWareHud()
