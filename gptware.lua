@@ -21,7 +21,7 @@ local hudicorner1
 local hudicorner2
 local hudtextlabel1
 local hudtextlabel2
-local hudtextlabel3
+local hudfpslabel
 
 local spacePressed = false
 local shiftPressed = false
@@ -744,7 +744,7 @@ function destroyHUDS()
     if hudicorner2 and hudicorner2.Parent then hudicorner2:Destroy() end
     if hudtextlabel1 and hudtextlabel1.Parent then hudtextlabel1:Destroy() end
     if hudtextlabel2 and hudtextlabel2.Parent then hudtextlabel2:Destroy() end
-    if hudtextlabel3 and hudtextlabel3.Parent then hudtextlabel3:Destroy() end
+    if hudfpslabel and hudfpslabel.Parent then hudfpslabel:Destroy() end
 end
 
 function useGPTWareHud()
@@ -882,7 +882,7 @@ function useGameSenseHUD()
     hudframe4 = Instance.new('Frame')
     hudtextlabel1 = Instance.new("TextLabel")
     hudtextlabel2 = Instance.new("TextLabel")
-    hudtextlabel3 = Instance.new("TextLabel")
+    hudfpslabel = Instance.new("TextLabel")
 
     hud.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
     hud.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -941,18 +941,18 @@ function useGameSenseHUD()
     hudtextlabel2.TextSize = 19.000
     hudtextlabel2.TextWrapped = true
 
-    hudtextlabel3.Parent = hudframe1
-    hudtextlabel3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    hudtextlabel3.BackgroundTransparency = 1.000
-    hudtextlabel3.BorderColor3 = Color3.fromRGB(0, 0, 0)
-    hudtextlabel3.BorderSizePixel = 0
-    hudtextlabel3.Position = UDim2.new(0.270642191, 0, -0.00199996959, 0)
-    hudtextlabel3.Size = UDim2.new(0, 192, 0, 28)
-    hudtextlabel3.Font = Enum.Font.JosefinSans
-    hudtextlabel3.Text = "694 FPS"
-    hudtextlabel3.TextColor3 = Color3.fromRGB(206, 206, 206)
-    hudtextlabel3.TextSize = 19.000
-    hudtextlabel3.TextWrapped = true
+    hudfpslabel.Parent = hudframe1
+    hudfpslabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    hudfpslabel.BackgroundTransparency = 1.000
+    hudfpslabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+    hudfpslabel.BorderSizePixel = 0
+    hudfpslabel.Position = UDim2.new(0.270642191, 0, -0.00199996959, 0)
+    hudfpslabel.Size = UDim2.new(0, 192, 0, 28)
+    hudfpslabel.Font = Enum.Font.JosefinSans
+    hudfpslabel.Text = workspace:GetRealPhysicsFPS() .. " FPS"
+    hudfpslabel.TextColor3 = Color3.fromRGB(206, 206, 206)
+    hudfpslabel.TextSize = 19.000
+    hudfpslabel.TextWrapped = true
 end
 
 useGPTWareHud()
@@ -1056,4 +1056,13 @@ function teleportToPlayer(targetPlayerName)
         },
         })
     end
+end
+
+--loaded hud stuff
+
+while true do
+    if hudfpslabel and hudfpslabel.Parent then
+        hudfpslabel.Text = workspace:GetRealPhysicsFPS() .. " FPS"
+    end
+    wait()
 end
