@@ -38,7 +38,7 @@ jobs:
               run: |
                   encoded_content=$(base64 -w 0 gptware.lua)
                   echo "Sending POST request with encoded content"
-                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                  curl -X POST https://lncvrt.xyz/api/gptware/update-script \
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: main" \
@@ -73,7 +73,7 @@ jobs:
               run: |
                   encoded_content=$(base64 -w 0 gptware-orion.lua)
                   echo "Sending POST request with encoded content"
-                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                  curl -X POST https://lncvrt.xyz/api/gptware/update-script \
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: orion" \
@@ -108,7 +108,7 @@ jobs:
               run: |
                   encoded_content=$(base64 -w 0 gptware-lt2.lua)
                   echo "Sending POST request with encoded content"
-                  curl -X POST https://www.lncvrt.xyz/api/gptware/update-script \
+                  curl -X POST https://lncvrt.xyz/api/gptware/update-script \
                     -H "Authorization: ${{ secrets.GPTWARE_KEY }}" \
                     -H "Content-Type: application/json" \
                     -H "Type: lt2" \
